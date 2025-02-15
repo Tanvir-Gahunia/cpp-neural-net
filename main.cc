@@ -21,21 +21,18 @@ float feed_forward(Xor m, Matrix in) {
     return m.final.at(0, 0);
 }
 
-float cost(Xor m, Matrix inputs, Matrix outputs)
-{
+float cost(Xor m, Matrix inputs, Matrix outputs) {
     assert(inputs.rows() == outputs.rows()); // better be the case that we have
     // outputs for each input
     assert(outputs.cols() == m.final.cols()); // size of output array and model
     // final should match
     float cost = 0;
-    for(int i = 0; i < inputs.rows(); ++i)
-    {
+    for (int i = 0; i < inputs.rows(); ++i) {
         feed_forward(m, inputs.row_to_matrix(i));
 
-        for(int j = 0; j < outputs.cols(); ++j)
-        {
+        for (int j = 0; j < outputs.cols(); ++j) {
             float diff = m.final.at(0, j) - outputs.row_to_matrix(i).at(0, j);
-            cost += diff*diff;
+            cost += diff * diff;
         }
     }
     return cost / inputs.rows();
@@ -50,7 +47,26 @@ int main(int argc, char *argv[]) {
     model.b2.rand(0, 1);
     model.final.rand(0, 1);
 
+    Matrix inputs(4, 2);
+    inputs.at(0, 0) = 0;
+    inputs.at(0, 1) = 0;
 
+    inputs.at(1, 0) = 1;
+    inputs.at(1, 1) = 0;
+
+    inputs.at(2, 0) = 0;
+    inputs.at(2, 1) = 1;
+
+    inputs.at(3, 0) = 1;
+    inputs.at(3, 1) = 1;
+
+    Matrix outputs(4, 1);
+    outputs.at(0, 0) = 0;
+    outputs.at(1, 0) = 1;
+    outputs.at(2, 0) = 1;
+    outputs.at(3, 0) = 0;
+
+    cost(model, inputs, outputs);
 
     return 0;
 }
