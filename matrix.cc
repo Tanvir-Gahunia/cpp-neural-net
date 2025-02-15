@@ -12,7 +12,7 @@ Matrix::Matrix(const int rows, const int cols) {
 
 Matrix::Matrix(const std::vector<std::vector<float>> &data) : data{data} {}
 
-void Matrix::print() {
+void Matrix::print() const {
     cout << "--------------------------------\n";
     for (auto &i : data) {
         for (auto &j : i)
@@ -27,7 +27,7 @@ void Matrix::activation(float (*activation_func)(float)) {
             e = activation_func(e);
 }
 
-Matrix Matrix::row_to_matrix(uint i) {
+Matrix Matrix::row_to_matrix(uint i) const {
     assert(i < rows());
     Matrix a(1, cols());
     for (int j = 0; j < cols(); ++j)
@@ -35,7 +35,7 @@ Matrix Matrix::row_to_matrix(uint i) {
     return a;
 }
 
-Matrix Matrix::sub_matrix(uint rstart, uint cstart, uint rend, uint cend) {
+Matrix Matrix::sub_matrix(uint rstart, uint cstart, uint rend, uint cend) const {
     assert(rstart <= rend);
     assert(cstart <= cend);
     assert(rend < rows());
@@ -49,14 +49,21 @@ Matrix Matrix::sub_matrix(uint rstart, uint cstart, uint rend, uint cend) {
 }
 
 float &Matrix::at(uint i, uint j) {
-    assert(i < data.size());
-    assert(j < data.front().size());
+    assert(i < rows());
+    assert(j < cols());
     return data[i][j];
 }
+
+const float &Matrix::at(uint i, uint j) const {
+    assert(i < rows());
+    assert(j < cols());
+    return data[i][j];
+}
+
 int Matrix::cols() const { return data[0].size(); }
 int Matrix::rows() const { return data.size(); }
 
-Matrix Matrix::operator+(const Matrix &rhs) {
+Matrix Matrix::operator+(const Matrix &rhs) const {
     assert(rows() == rhs.rows());
     assert(cols() == rhs.cols());
     Matrix answer(rows(), cols());
@@ -66,7 +73,7 @@ Matrix Matrix::operator+(const Matrix &rhs) {
     return answer;
 }
 
-Matrix Matrix::operator-(const Matrix &rhs) {
+Matrix Matrix::operator-(const Matrix &rhs) const {
     assert(rows() == rhs.rows());
     assert(cols() == rhs.cols());
     Matrix answer(rows(), cols());
@@ -85,7 +92,7 @@ void Matrix::rand(float lower, float upper) {
             j = dist(gen);
 }
 
-Matrix Matrix::operator*(const Matrix &rhs) {
+Matrix Matrix::operator*(const Matrix &rhs) const {
     assert(cols() == rhs.rows());
     Matrix answer(rows(), rhs.cols());
     for (int i = 0; i < answer.rows(); ++i)

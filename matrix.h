@@ -5,14 +5,15 @@ class Matrix
 public:
     Matrix(const int rows, const int cols);
     Matrix(const std::vector<std::vector<float> >&);
-    void print();
-    Matrix operator+(const Matrix&);
-    Matrix operator-(const Matrix&);
-    Matrix operator*(const Matrix&);
-    Matrix row_to_matrix(uint);
-    Matrix sub_matrix(uint, uint, uint, uint);
+    void print() const;
+    Matrix operator+(const Matrix&) const;
+    Matrix operator-(const Matrix&) const;
+    Matrix operator*(const Matrix&) const;
+    Matrix row_to_matrix(uint) const;
+    Matrix sub_matrix(uint, uint, uint, uint) const;
     void rand(float, float);
     float& at(uint i, uint j);
+    const float& at(uint i, uint j) const;
     int rows() const;
     int cols() const;
     void activation(float (*activation_func)(float));
