@@ -4,10 +4,13 @@ class Matrix
     std::vector<std::vector<float> > data;
 public:
     Matrix(const int rows, const int cols);
+    Matrix(const std::vector<std::vector<float> >&);
     void print();
     Matrix operator+(const Matrix&);
+    Matrix operator-(const Matrix&);
     Matrix operator*(const Matrix&);
     Matrix row_to_matrix(uint);
+    Matrix sub_matrix(uint, uint, uint, uint);
     void rand(float, float);
     float& at(uint i, uint j);
     int rows() const;

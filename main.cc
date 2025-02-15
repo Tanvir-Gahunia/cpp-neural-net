@@ -46,27 +46,9 @@ int main(int argc, char *argv[]) {
     model.w2.rand(0, 1);
     model.b2.rand(0, 1);
     model.final.rand(0, 1);
-
-    Matrix inputs(4, 2);
-    inputs.at(0, 0) = 0;
-    inputs.at(0, 1) = 0;
-
-    inputs.at(1, 0) = 1;
-    inputs.at(1, 1) = 0;
-
-    inputs.at(2, 0) = 0;
-    inputs.at(2, 1) = 1;
-
-    inputs.at(3, 0) = 1;
-    inputs.at(3, 1) = 1;
-
-    Matrix outputs(4, 1);
-    outputs.at(0, 0) = 0;
-    outputs.at(1, 0) = 1;
-    outputs.at(2, 0) = 1;
-    outputs.at(3, 0) = 0;
-
-    cost(model, inputs, outputs);
-
+    Matrix training({{0, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}});
+    Matrix inputs = training.sub_matrix(0, 0, 3, 1);
+    Matrix outputs = training.sub_matrix(0, 2, 3, 2);
+    std::cout << cost(model, inputs, outputs) << std::endl;
     return 0;
 }

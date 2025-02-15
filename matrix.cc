@@ -10,6 +10,8 @@ Matrix::Matrix(const int rows, const int cols) {
         v.resize(cols, 0);
 }
 
+Matrix::Matrix(const std::vector<std::vector<float>> &data) : data{data} {}
+
 void Matrix::print() {
     cout << "--------------------------------\n";
     for (auto &i : data) {
@@ -19,20 +21,30 @@ void Matrix::print() {
     }
     cout << "--------------------------------\n";
 }
-void Matrix::activation(float (*activation_func)(float))
-{
-    for(auto& i : data)
-        for(auto& e : i)
+void Matrix::activation(float (*activation_func)(float)) {
+    for (auto &i : data)
+        for (auto &e : i)
             e = activation_func(e);
 }
 
-
-Matrix Matrix::row_to_matrix(uint i)
-{
+Matrix Matrix::row_to_matrix(uint i) {
     assert(i < rows());
     Matrix a(1, cols());
-    for(int j = 0; j < cols(); ++j)
+    for (int j = 0; j < cols(); ++j)
         a.at(0, j) = data[i][j];
+    return a;
+}
+
+Matrix Matrix::sub_matrix(uint rstart, uint cstart, uint rend, uint cend) {
+    assert(rstart <= rend);
+    assert(cstart <= cend);
+    assert(rend < rows());
+    assert(cend < cols());
+
+    Matrix a(1+rend - rstart, 1+cend - cstart);
+    for (int i = rstart; i <= rend; ++i)
+        for (int j = cstart; j <= cend; ++j)
+            a.at(i-rstart, j-cstart) = data[i][j];
     return a;
 }
 
@@ -54,6 +66,16 @@ Matrix Matrix::operator+(const Matrix &rhs) {
     return answer;
 }
 
+Matrix Matrix::operator-(const Matrix &rhs) {
+    assert(rows() == rhs.rows());
+    assert(cols() == rhs.cols());
+    Matrix answer(rows(), cols());
+    for (int i = 0; i < rows(); ++i)
+        for (int j = 0; j < cols(); ++j)
+            answer.data[i][j] = data[i][j] - rhs.data[i][j];
+    return answer;
+}
+
 void Matrix::rand(float lower, float upper) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -61,7 +83,6 @@ void Matrix::rand(float lower, float upper) {
     for (auto &i : data)
         for (auto &j : i)
             j = dist(gen);
-            
 }
 
 Matrix Matrix::operator*(const Matrix &rhs) {
