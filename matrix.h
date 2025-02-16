@@ -5,6 +5,7 @@ class Matrix
 {
     std::vector<std::vector<float> > data;
 public:
+    Matrix() = default;
     Matrix(const int rows, const int cols);
     Matrix(const std::vector<std::vector<float> >&);
     void print() const;
