@@ -6,7 +6,7 @@
 NeuralNet::NeuralNet(const std::vector<uint>& topology)
 {
     for(int i = 0; i < topology.size() - 1; ++i)
-        layers.emplace_back(topology[i], topology[i+1], false);
+        layers.emplace_back(topology[i], topology[i+1], true);
 }
 
 
@@ -55,4 +55,7 @@ void NeuralNet::learn(const NeuralNet& gradients, const float learning_rate)
     for(int i = 0; i < layers.size(); ++i)
         layers[i].learn(gradients.layers[i], learning_rate);
 }
+
+
+
 
