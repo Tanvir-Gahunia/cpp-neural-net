@@ -129,9 +129,6 @@ int main(int argc, char *argv[]) {
             std::cout << input_row.at(0, j) << " ";
         std::cout << std::endl;
         std::cout << "Output is " << output << std::endl;
-
     }
-
-    
     return 0;
 }

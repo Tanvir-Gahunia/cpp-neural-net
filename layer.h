@@ -1,3 +1,5 @@
+#ifndef LAYER_H
+#define LAYER_H
 #include "matrix.h"
 #include "activation_func.h"
 
@@ -8,6 +10,7 @@ public:
     Layer(uint, uint, bool);
     Matrix feed_forward(const Matrix& in, float(*activation_function)(float));
 };
+#endif
 
 
 

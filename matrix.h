@@ -1,3 +1,5 @@
+#ifndef MATRIX_H
+#define MATRIX_H
 #include "vector"
 class Matrix
 {
@@ -22,4 +24,4 @@ public:
 class Neuron;
 
 class NN;
-
+#endif
