@@ -3,14 +3,14 @@
 #include <cassert>
 #include <iostream>
 
-NeuralNet::NeuralNet(const std::vector<uint>& topology)
+NeuralNet::NeuralNet(const std::vector<uint>& topology, float(*activation_func)(float)) : activation_func(activation_func)
 {
     for(int i = 0; i < topology.size() - 1; ++i)
         layers.emplace_back(topology[i], topology[i+1], true);
 }
 
 
-NeuralNet::NeuralNet(const std::vector<Layer>& in)
+NeuralNet::NeuralNet(const std::vector<Layer>& in, float(*activation_func)(float)) : activation_func(activation_func)
 {
     for(auto& layer : in)
         layers.push_back(layer);
@@ -19,7 +19,7 @@ NeuralNet::NeuralNet(const std::vector<Layer>& in)
 Matrix NeuralNet::feed_forward(Matrix in) const
 {
     for(auto& layer : layers)
-        in = layer.feed_forward(in, sigmoid);
+        in = layer.feed_forward(in, activation_func);
     return in;
 }
 
@@ -45,7 +45,7 @@ NeuralNet NeuralNet::train_network(const Matrix& inputs, const Matrix& outputs, 
     std::cout << "Cost is " << cost_so_far << std::endl;
     for(auto& layer : layers)
         gradients.push_back(layer.train_layer(*this, inputs, outputs, wiggle_amount, cost_so_far));
-    return NeuralNet{gradients};
+    return NeuralNet{gradients, activation_func};
 }
 
 

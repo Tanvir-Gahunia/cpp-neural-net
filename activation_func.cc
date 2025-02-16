@@ -11,4 +11,14 @@ float sigmoidDerivative(float x)
     return sig * (1 - sig);
 }
 
+float ReLu(float x)
+{
+    return x > 0 ? x : 0;
+}
+
+float ReLuDerivative(float x)
+{
+    return x > 0 ? 1.0 : 0.0;
+}
+
 
