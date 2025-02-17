@@ -1,5 +1,4 @@
 #include "layer.h"
-#include "neuralnet.h"
 #include <cassert>
 
 Layer::Layer(uint in_size, uint out_size, bool rand)
