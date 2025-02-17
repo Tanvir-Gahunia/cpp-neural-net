@@ -27,8 +27,4 @@ public:
     int cols() const;
     void activation(float (*activation_func)(float));
 };
-
-class Neuron;
-
-class NN;
 #endif
