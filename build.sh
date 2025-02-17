@@ -1,4 +1,4 @@
 #!/bin/bash
 
 
-clang++ *.cc -o exec -std=c++20 -Wall -Werror -O3
+clang++ *.cc -o exec -std=c++20 -Wall -Werror -O3 -pedantic

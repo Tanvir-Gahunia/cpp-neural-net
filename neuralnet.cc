@@ -1,25 +1,37 @@
 #include "neuralnet.h"
+#include "activation_func.h"
 #include "layer.h"
 #include <cassert>
 #include <iostream>
 
-NeuralNet::NeuralNet(const std::vector<uint>& topology, float(*activation_func)(float)) : activation_func(activation_func)
+NeuralNet::NeuralNet(const std::vector<uint>& topology, struct activation_func af) : af{af}
 {
     for(int i = 0; i < topology.size() - 1; ++i)
         layers.emplace_back(topology[i], topology[i+1], true);
 }
 
 
-NeuralNet::NeuralNet(const std::vector<Layer>& in, float(*activation_func)(float)) : activation_func(activation_func)
+NeuralNet::NeuralNet(const std::vector<Layer>& in, struct activation_func af) : af(af)
 {
     for(auto& layer : in)
         layers.push_back(layer);
 }
 
+NeuralNet::NeuralNet(const std::vector<Matrix>& weights, const std::vector<Matrix>& biases, struct activation_func af) : af{af}
+{
+    assert(weights.size() == biases.size());
+    for(int i = 0; i < weights.size(); ++i)
+    {
+        assert(weights[i].cols() == biases[i].cols());
+        layers.emplace_back(weights[i], biases[i]);
+    }
+}
+
+
 Matrix NeuralNet::feed_forward(Matrix in) const
 {
     for(auto& layer : layers)
-        in = layer.feed_forward(in, activation_func);
+        in = layer.feed_forward(in, af.activation_f);
     return in;
 }
 
@@ -40,12 +52,25 @@ float NeuralNet::cost(const Matrix& inputs, const Matrix& outputs) const
 
 NeuralNet NeuralNet::train_network(const Matrix& inputs, const Matrix& outputs, const float wiggle_amount)
 {
-    std::vector<Layer> gradients;
+    std::vector<Matrix> dWs, dbs;
+    Matrix dA, dA_prev;
     float cost_so_far = cost(inputs, outputs);
     std::cout << "Cost is " << cost_so_far << std::endl;
+
+    Matrix A = inputs;
     for(auto& layer : layers)
-        gradients.push_back(layer.train_layer(*this, inputs, outputs, wiggle_amount, cost_so_far));
-    return NeuralNet{gradients, activation_func};
+        A = layer.feed_forward(A, af.activation_f);
+    dA = A - outputs;
+
+    for (int i = layers.size() - 1; i >= 0; --i) {
+        Matrix dW, db;
+        layers[i].backprop(dA, (i == 0 ? inputs : layers[i - 1].get_activations()), dW, db, dA_prev, af.activation_f_derivative);
+        dWs.push_back(dW);
+        dbs.push_back(db);
+        dA = dA_prev; 
+    }
+
+    return NeuralNet(dWs, dbs, af);
 }
 
 

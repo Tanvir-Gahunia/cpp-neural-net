@@ -27,6 +27,35 @@ void Matrix::activation(float (*activation_func)(float)) {
             e = activation_func(e);
 }
 
+Matrix Matrix::sumRows() const
+{
+    Matrix a(1, cols());
+    for(int i = 0; i < rows(); ++i)
+        for (int j = 0; j < cols(); ++j)
+            a.data[0][j] += data[i][j];
+    return a;
+}
+
+Matrix Matrix::element_wise_product(const Matrix& rhs) const
+{
+    assert(rows() == rhs.rows());
+    assert(cols() == rhs.cols());
+    Matrix a(rows(), cols());
+    for(int i = 0; i < rows(); ++i)
+        for(int j = 0; j < cols(); ++j)
+            a.data[i][j] = data[i][j] * rhs.data[i][j];
+    return a;
+}
+
+Matrix Matrix::broadcast(uint r) const
+{
+    assert(rows() == 1);
+    Matrix a(r, cols());
+    for(int i = 0; i < r; ++i)
+        a.data[i] = data[0];
+    return a;
+}
+
 Matrix Matrix::row_to_matrix(uint i) const {
     assert(i < rows());
     Matrix a(1, cols());
@@ -83,6 +112,16 @@ Matrix Matrix::operator-(const Matrix &rhs) const {
     return answer;
 }
 
+
+Matrix Matrix::transpose() const
+{
+    Matrix a(cols(), rows());
+    for(int i = 0; i < rows(); ++i)
+        for(int j = 0; j < cols(); ++j)
+            a.at(j, i) = data[i][j];
+    return a;
+}
+
 void Matrix::rand(float lower, float upper) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -90,6 +129,14 @@ void Matrix::rand(float lower, float upper) {
     for (auto &i : data)
         for (auto &j : i)
             j = dist(gen);
+}
+
+Matrix& Matrix::operator*(float f)
+{
+    for(int i = 0; i < rows(); ++i)
+        for(int j = 0; j < cols(); ++j)
+            data[i][j]*=f;
+    return *this;
 }
 
 Matrix Matrix::operator*(const Matrix &rhs) const {

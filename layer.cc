@@ -9,11 +9,18 @@ Layer::Layer(uint in_size, uint out_size, bool rand)
     weights.rand(0, 1);
     biases.rand(0, 1);
 }
+
+Layer::Layer(Matrix weights, Matrix biases) : weights{weights}, biases{biases}
+{}
+
+
 Matrix Layer::feed_forward(const Matrix &in,
                            float (*activation_function)(float)) const {
-    Matrix a = (in * weights) + biases;
-    a.activation(activation_function);
-    return a;
+
+    pre_activations = (in * weights) + biases.broadcast(in.rows());
+    activations = pre_activations;
+    activations.activation(activation_function);
+    return activations;
 }
 
 Layer Layer::train_layer(const NeuralNet &model, const Matrix &inputs,
@@ -40,6 +47,16 @@ Layer Layer::train_layer(const NeuralNet &model, const Matrix &inputs,
     return gradient;
 }
 
+void Layer::backprop(const Matrix& dA, const Matrix& A_prev, Matrix& dW, Matrix& db, Matrix& dA_prev, float (*activation_derivative)(float))
+{
+    Matrix dZ = pre_activations;
+    dZ.activation(activation_derivative);
+    dZ = dZ.element_wise_product(dA);
+    dW =  (A_prev.transpose() * dZ) * (1.0 / A_prev.rows());
+    db = dZ.sumRows() * (1.0 / A_prev.rows());
+    dA_prev = dZ * weights.transpose();
+}
+
 void Layer::learn(const Layer &gradient, const float learning_rate) {
     assert(weights.rows() == gradient.weights.rows());
     assert(weights.cols() == gradient.weights.cols());
@@ -53,3 +70,5 @@ void Layer::learn(const Layer &gradient, const float learning_rate) {
         for (int j = 0; j < biases.cols(); ++j)
             biases.at(i, j) -= learning_rate * gradient.biases.at(i, j);
 }
+
+const Matrix& Layer::get_activations() const {return activations;}

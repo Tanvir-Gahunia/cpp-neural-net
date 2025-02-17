@@ -9,7 +9,8 @@ int main(int argc, char *argv[]) {
     inputs.print();
     Matrix outputs = training.sub_matrix(0, 1, 3, 1);
     outputs.print();
-    NeuralNet nn ({1, 1}, ReLu);
+    activation_func af(ReLu, ReLuDerivative);
+    NeuralNet nn ({1, 1}, af);
     for(int i = 0; i < 10*1000; ++i)
         nn.learn(nn.train_network(inputs, outputs, 1e-1), 1e-1);
 
