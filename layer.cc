@@ -23,29 +23,6 @@ Matrix Layer::feed_forward(const Matrix &in,
     return activations;
 }
 
-Layer Layer::train_layer(const NeuralNet &model, const Matrix &inputs,
-                         const Matrix &outputs, const float wiggle_amount,
-                         const float cost) {
-    Layer gradient{(uint)weights.rows(), (uint)weights.cols(), false};
-    float saved;
-    for (int i = 0; i < weights.rows(); ++i)
-        for (int j = 0; j < weights.cols(); ++j) {
-            saved = weights.at(i, j);
-            weights.at(i, j) += wiggle_amount;
-            gradient.weights.at(i, j) =
-                (model.cost(inputs, outputs) - cost) / wiggle_amount;
-            weights.at(i, j) = saved;
-        }
-    for (int i = 0; i < biases.rows(); ++i)
-        for (int j = 0; j < biases.cols(); ++j) {
-            saved = biases.at(i, j);
-            biases.at(i, j) += wiggle_amount;
-            gradient.biases.at(i, j) =
-                (model.cost(inputs, outputs) - cost) / wiggle_amount;
-            biases.at(i, j) = saved;
-        }
-    return gradient;
-}
 
 void Layer::backprop(const Matrix& dA, const Matrix& A_prev, Matrix& dW, Matrix& db, Matrix& dA_prev, float (*activation_derivative)(float))
 {

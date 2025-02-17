@@ -15,7 +15,7 @@ public:
     NeuralNet(const std::vector<Matrix>&, const std::vector<Matrix>&, struct activation_func);
     Matrix feed_forward(Matrix) const;
     float cost(const Matrix&, const Matrix&) const;
-    NeuralNet train_network(const Matrix&, const Matrix&, const float);
+    NeuralNet train_network(const Matrix&, const Matrix&);
     void learn(const NeuralNet&, const float);
 };
 #endif

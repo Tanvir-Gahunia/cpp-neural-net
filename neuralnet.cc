@@ -50,7 +50,7 @@ float NeuralNet::cost(const Matrix& inputs, const Matrix& outputs) const
     return cost / inputs.rows();
 }
 
-NeuralNet NeuralNet::train_network(const Matrix& inputs, const Matrix& outputs, const float wiggle_amount)
+NeuralNet NeuralNet::train_network(const Matrix& inputs, const Matrix& outputs)
 {
     std::vector<Matrix> dWs, dbs;
     Matrix dA, dA_prev;
@@ -69,7 +69,8 @@ NeuralNet NeuralNet::train_network(const Matrix& inputs, const Matrix& outputs, 
         dbs.push_back(db);
         dA = dA_prev; 
     }
-
+    std::reverse(dWs.begin(), dWs.end());
+    std::reverse(dbs.begin(), dbs.end());
     return NeuralNet(dWs, dbs, af);
 }
 
