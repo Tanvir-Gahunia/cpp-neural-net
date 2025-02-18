@@ -31,7 +31,8 @@ Output Layer: 10 neurons
 chmod +x build.sh
 ./build.sh  
 
-# Run the executable  
+# Run the executable
+chmod +x exec  
 ./exec  
 ```
 ---
