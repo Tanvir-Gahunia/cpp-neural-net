@@ -27,7 +27,8 @@ Output Layer: 10 neurons
 
 ## ⚙️ Build Instructions  
 ```bash
-# Compile the project  
+# Compile the project
+chmod +x build.sh
 ./build.sh  
 
 # Run the executable  
