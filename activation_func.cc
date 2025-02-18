@@ -11,12 +11,12 @@ float sigmoidDerivative(float x)
     return sig * (1 - sig);
 }
 
-float ReLu(float x)
+float LeakyReLu(float x)
 {
     return x > 0 ? x : 0.01f * x;
 }
 
-float ReLuDerivative(float x)
+float LeakyReLuDerivative(float x)
 {
     return x > 0 ? 1.0 : 0.01f;
 }

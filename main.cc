@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     std::string s;
     while(getline(in, s)) import_data_entry(training, s);
     Matrix training_set(training);
-    activation_func af(ReLu, ReLuDerivative);
+    activation_func af(LeakyReLu, LeakyReLuDerivative);
     NeuralNet nn({784, 128, 64, 10}, af);
     Matrix inputs = training_set.sub_matrix(0, 1, training.size() - 1, training.front().size() - 1);
     inputs = inputs * (1.0f / 255.0f);
