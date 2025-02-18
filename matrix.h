@@ -21,6 +21,7 @@ public:
     Matrix sumRows() const;
     Matrix broadcast(uint) const;
     void rand(float, float);
+    void rand_he(uint);
     float& at(uint i, uint j);
     const float& at(uint i, uint j) const;
     int rows() const;

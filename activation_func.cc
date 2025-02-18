@@ -13,12 +13,12 @@ float sigmoidDerivative(float x)
 
 float ReLu(float x)
 {
-    return x > 0 ? x : 0;
+    return x > 0 ? x : 0.01f * x;
 }
 
 float ReLuDerivative(float x)
 {
-    return x > 0 ? 1.0 : 0;
+    return x > 0 ? 1.0 : 0.01f;
 }
 
 

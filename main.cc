@@ -25,15 +25,15 @@ int main(int argc, char *argv[]) {
     while(getline(in, s)) import_data_entry(training, s);
     Matrix training_set(training);
     activation_func af(ReLu, ReLuDerivative);
-    NeuralNet nn({784, 16, 16, 10}, af);
+    NeuralNet nn({784, 128, 64, 10}, af);
     Matrix inputs = training_set.sub_matrix(0, 1, training.size() - 1, training.front().size() - 1);
     inputs = inputs * (1.0f / 255.0f);
     Matrix outputs(training.size(), 10);
     for(int i = 0; i < training.size(); ++i)
         outputs.at(i, training_set.at(i, 0)) = 1.0;
-    for(int i = 0; i < 100*1000; ++i)
-        nn.learn(nn.train_network(inputs, outputs), 1e-6);
-
+    float learning_rate = 1e-1;
+    for(int i = 0; i < 1000; ++i)
+        nn.learn(nn.train_network(inputs, outputs), learning_rate);
 
     return 0;
 }

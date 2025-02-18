@@ -5,8 +5,8 @@ Layer::Layer(uint in_size, uint out_size, bool rand)
     : weights(in_size, out_size), biases(1, out_size) {
     if (!rand)
         return;
-    weights.rand(0, 1);
-    biases.rand(0, 1);
+    weights.rand_he(in_size);
+    biases.rand_he(in_size);
 }
 
 Layer::Layer(Matrix weights, Matrix biases) : weights{weights}, biases{biases}

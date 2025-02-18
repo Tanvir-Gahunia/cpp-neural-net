@@ -1,5 +1,6 @@
 #include "matrix.h"
 #include <cassert>
+#include <cmath>
 #include <iostream>
 #include <random>
 using namespace std;
@@ -126,6 +127,17 @@ void Matrix::rand(float lower, float upper) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> dist(lower, upper);
+    for (auto &i : data)
+        for (auto &j : i)
+            j = dist(gen);
+}
+
+
+void Matrix::rand_he(uint n)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::normal_distribution<float> dist(0, std::sqrt(2.0f / n));
     for (auto &i : data)
         for (auto &j : i)
             j = dist(gen);
