@@ -2,6 +2,7 @@
 #include "activation_func.h"
 #include "layer.h"
 #include <cassert>
+#include <iomanip>
 #include <iostream>
 
 NeuralNet::NeuralNet(const std::vector<uint>& topology, struct activation_func af) : af{af}
@@ -55,7 +56,7 @@ NeuralNet NeuralNet::train_network(const Matrix& inputs, const Matrix& outputs)
     std::vector<Matrix> dWs, dbs;
     Matrix dA, dA_prev;
     float cost_so_far = cost(inputs, outputs);
-    std::cout << "Cost is " << cost_so_far << std::endl;
+    std::cout << "Cost is " << std::fixed << std::setprecision(6) << cost_so_far << std::endl;
 
     Matrix A = inputs;
     for(auto& layer : layers)

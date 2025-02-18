@@ -1,28 +1,39 @@
 #include "matrix.h"
 #include "neuralnet.h"
 #include "activation_func.h"
+#include <fstream>
 #include <iostream>
+#include <sstream>
+#include <string>
+void import_data_entry(std::vector<std::vector<float> >& training, std::string& s)
+{
+    training.emplace_back();
+    std::istringstream ss(s);
+    float tmp;
+    while(ss >> tmp)
+    {
+        training.back().push_back(tmp);
+        if (ss.peek() != ',') return;
+        ss.ignore();
+    }
+}
 
 int main(int argc, char *argv[]) {
-    //Matrix training({{0, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}});
-    Matrix training({{0, 0}, {1, 2}, {2, 4}, {6, 12}});
-    //Matrix inputs = training.sub_matrix(0, 0, 3, 1);
-    Matrix inputs = training.sub_matrix(0, 0, 3, 0);
-    inputs.print();
-    //Matrix outputs = training.sub_matrix(0, 2, 3, 2);
-    Matrix outputs = training.sub_matrix(0, 1, 3, 1);
-    outputs.print();
-    //activation_func af(sigmoid, sigmoidDerivative);
+    std::ifstream in("training.csv");
+    std::vector<std::vector<float> >training;
+    std::string s;
+    while(getline(in, s)) import_data_entry(training, s);
+    Matrix training_set(training);
     activation_func af(ReLu, ReLuDerivative);
-    //NeuralNet nn ({2, 2, 1}, af);
-    NeuralNet nn ({1, 1}, af);
+    NeuralNet nn({784, 16, 16, 10}, af);
+    Matrix inputs = training_set.sub_matrix(0, 1, training.size() - 1, training.front().size() - 1);
+    inputs = inputs * (1.0f / 255.0f);
+    Matrix outputs(training.size(), 10);
+    for(int i = 0; i < training.size(); ++i)
+        outputs.at(i, training_set.at(i, 0)) = 1.0;
     for(int i = 0; i < 100*1000; ++i)
-        nn.learn(nn.train_network(inputs, outputs), 1e-1);
+        nn.learn(nn.train_network(inputs, outputs), 1e-6);
 
-    for (int i = 0; i < inputs.rows(); ++i) {
-        Matrix a = nn.feed_forward(inputs.row_to_matrix(i));
-        //std::cout << inputs.row_to_matrix(i).at(0, 0) << " ^ " << inputs.row_to_matrix(i).at(0, 1) << " is " << a.at(0, 0) << std::endl;
-        std::cout << inputs.row_to_matrix(i).at(0, 0) << " * 2 is " << a.at(0, 0) << std::endl;
-    }
+
     return 0;
 }

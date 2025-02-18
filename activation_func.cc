@@ -18,7 +18,7 @@ float ReLu(float x)
 
 float ReLuDerivative(float x)
 {
-    return x > 0 ? 1.0 : 0.0;
+    return x > 0 ? 1.0 : 0;
 }
 
 
