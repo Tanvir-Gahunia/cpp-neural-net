@@ -36,9 +36,9 @@ Output Layer: 10 neurons
 ---
 
 ## 🔧 Future Improvements
-- **Implementing Cross-Entropy Loss
-- **Adding model saving/loading functionality
-- **Exploring learning rate scheduling
+- Implementing **Cross-Entropy** Loss
+- Adding model **saving/loading** functionality
+- Exploring learning rate scheduling
 
 ---
 
