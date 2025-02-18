@@ -39,6 +39,9 @@ Output Layer: 10 neurons
 - Implementing **Cross-Entropy** Loss
 - Adding model **saving/loading** functionality
 - Exploring learning rate scheduling
+- Optimize learning routines
+  - Reduce number of times cost is caluclated
+  - Reduce redundant feeds 
 
 ---
 
